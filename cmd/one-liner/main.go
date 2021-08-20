@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"os"
+	"github.com/tamerfrombk/one-liner/pkg/cli"
+)
 
 func main() {
-	fmt.Println("hello");
+	os.Exit(cli.Run(os.Args[1:]))
 }
