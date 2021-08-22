@@ -12,6 +12,13 @@ type Args struct {
 	IsHelp bool
 }
 
+func init() {
+	flag.Usage = func () {
+		fmt.Fprintf(flag.CommandLine.Output(), "one-liner is a program for collapsing input from stdin into a single line on stdout:\n")
+		flag.PrintDefaults()
+	}
+}
+
 func ParseArgs() *Args {
 	helpPtr := flag.Bool("h", false, "displays this help message")
 
@@ -23,7 +30,6 @@ func ParseArgs() *Args {
 }
 
 func PrintOneLine(r io.Reader, w io.Writer) error {
-	
 	const READ_BUFFER_LEN = 64 * 1024
 
 	reader := bufio.NewReader(r)
@@ -48,7 +54,7 @@ func PrintOneLine(r io.Reader, w io.Writer) error {
 func Run(cmdLine []string) int {
 	args := ParseArgs()
 	if args.IsHelp {
-		flag.PrintDefaults()
+		flag.Usage()
 		return 0
 	}
 
