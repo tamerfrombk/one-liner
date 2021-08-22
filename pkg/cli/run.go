@@ -23,12 +23,19 @@ func ParseArgs() (*Args) {
 }
 
 func PrintOneLine(r io.Reader) error {
-	scanner := bufio.NewScanner(r); 
-	for scanner.Scan() {
-		fmt.Print(scanner.Text())
+
+	reader := bufio.NewReader(r);
+
+	buf := make([]byte, 4 * 1024)
+	for b, err := reader.Read(buf); b > 0; b, err = reader.Read(buf) {
+		if err != nil {
+			return err
+		}
+
+		fmt.Print(string(buf))
 	}
 
-	return scanner.Err()
+	return nil
 }
 
 func Run(cmdLine []string) int {
