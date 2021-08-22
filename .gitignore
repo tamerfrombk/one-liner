@@ -24,3 +24,6 @@ one-liner
 /Godeps/
 
 # End of https://www.toptal.com/developers/gitignore/api/go
+test-data/*
+!test-data/lorem-ipsum.txt
+!test-data/gen.py
