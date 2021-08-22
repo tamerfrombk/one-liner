@@ -12,7 +12,7 @@ type Args struct {
 	IsHelp bool
 }
 
-func ParseArgs() (*Args) {
+func ParseArgs() *Args {
 	helpPtr := flag.Bool("h", false, "displays this help message")
 
 	flag.Parse()
@@ -22,17 +22,27 @@ func ParseArgs() (*Args) {
 	}
 }
 
+func Clean(b []byte) string {
+	for i, r := range b {
+		if r == byte('\n') {
+			b[i] = byte(' ')
+		}
+	}
+
+	return string(b)
+}
+
 func PrintOneLine(r io.Reader) error {
 
-	reader := bufio.NewReader(r);
+	reader := bufio.NewReader(r)
 
-	buf := make([]byte, 4 * 1024)
+	buf := make([]byte, 64 * 1024)
 	for b, err := reader.Read(buf); b > 0; b, err = reader.Read(buf) {
 		if err != nil {
 			return err
 		}
-
-		fmt.Print(string(buf))
+		
+		fmt.Print(Clean(buf))
 	}
 
 	return nil
