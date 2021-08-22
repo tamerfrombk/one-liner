@@ -8,11 +8,19 @@ go build ./cmd/one-liner
 
 echo "Input file: $INPUT_FILE"
 
+echo "----------- wc ------------"
+wc "$INPUT_FILE"
+echo "---------------------------"
+
 echo "----------- tr test ------------"
-time tr -d '\n' < "$INPUT_FILE" > /dev/null
+tr -s '\n' ' ' < "$INPUT_FILE" | wc
+
+time tr -s '\n' ' ' < "$INPUT_FILE" > /dev/null
 echo "--------------------------------"
 
 echo "----------- one-liner test ------------"
+./one-liner < "$INPUT_FILE" | wc
+
 time ./one-liner < "$INPUT_FILE" > /dev/null
 echo "---------------------------------------"
 
