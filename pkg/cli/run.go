@@ -22,21 +22,10 @@ func ParseArgs() (*Args) {
 	}
 }
 
-func Clean(s string) string {
-	ret := ""
-	for _, c := range(s) {
-		if c != '\n' {
-			ret += string(c)
-		}
-	}
-
-	return ret
-}
-
 func PrintOneLine(r io.Reader) error {
 	scanner := bufio.NewScanner(r); 
 	for scanner.Scan() {
-		fmt.Print(Clean(scanner.Text()))
+		fmt.Print(scanner.Text())
 	}
 
 	return scanner.Err()
