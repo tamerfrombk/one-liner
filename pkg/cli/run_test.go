@@ -1,8 +1,12 @@
 package cli
 
-import "testing"
+import (
+	"testing"
+	"bytes"
+	"strings"
+)
 
-func TestClean(t *testing.T) {
+func TestPrintOneLine(t *testing.T) {
     testCases := map[string]string {
 		" hello ": " hello ",
 		"\nhello": " hello",
@@ -14,7 +18,14 @@ func TestClean(t *testing.T) {
 	}
 
 	for input, expected := range testCases {
-		if actual := Clean([]byte(input)); actual != expected {
+		reader := strings.NewReader(input)
+		writer := bytes.NewBufferString("")
+
+		if err := PrintOneLine(reader, writer); err != nil {
+			t.Fatal(err)
+		}
+
+		if actual := writer.String(); actual != expected {
 			t.Fatalf("expected '%s', got '%s'", expected, actual)
 		}
 	}

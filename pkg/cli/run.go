@@ -22,17 +22,7 @@ func ParseArgs() *Args {
 	}
 }
 
-func Clean(b []byte) string {
-	for i, r := range b {
-		if r == byte('\n') {
-			b[i] = byte(' ')
-		}
-	}
-
-	return string(b)
-}
-
-func PrintOneLine(r io.Reader) error {
+func PrintOneLine(r io.Reader, w io.Writer) error {
 
 	reader := bufio.NewReader(r)
 
@@ -41,8 +31,8 @@ func PrintOneLine(r io.Reader) error {
 		if err != nil {
 			return err
 		}
-		
-		fmt.Print(Clean(buf))
+
+		w.Write(clean(buf, b))
 	}
 
 	return nil
@@ -54,12 +44,25 @@ func Run(cmdLine []string) int {
 		printHelp(0)
 	}
 
-	if err := PrintOneLine(os.Stdin); err != nil {
+	if err := PrintOneLine(os.Stdin, os.Stdout); err != nil {
 		fmt.Fprintf(os.Stderr, "%q", err)
 		return 1
 	}
 
 	return 0
+}
+
+func clean(b []byte, n int) []byte {
+	buf := make([]byte, n)
+	for i := 0; i < n; i++ {
+		if b[i] == '\n' {
+			buf[i] = ' '
+		} else {
+			buf[i] = b[i] 
+		}
+	}
+
+	return buf
 }
 
 func printHelp(exitCode int) {
