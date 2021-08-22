@@ -2,25 +2,31 @@
 
 set -e
 
-INPUT_FILE='./test-data/large-file.txt'
-
 go build ./cmd/one-liner
 
-echo "Input file: $INPUT_FILE"
+cd test-data
 
-echo "----------- wc ------------"
-wc "$INPUT_FILE"
-echo "---------------------------"
+inputs='small.txt medium.txt large.txt'
+for input in $inputs; do
+    INPUT_FILE="$input"
 
-echo "----------- tr test ------------"
-tr -s '\n' ' ' < "$INPUT_FILE" | wc
+    echo "Input file: $INPUT_FILE"
 
-time tr -s '\n' ' ' < "$INPUT_FILE" > /dev/null
-echo "--------------------------------"
+    echo "----------- wc ------------"
+    wc "$INPUT_FILE"
+    echo "---------------------------"
 
-echo "----------- one-liner test ------------"
-./one-liner < "$INPUT_FILE" | wc
+    echo "----------- tr test ------------"
+    tr -s '\n' ' ' < "$INPUT_FILE" | wc
 
-time ./one-liner < "$INPUT_FILE" > /dev/null
-echo "---------------------------------------"
+    time tr -s '\n' ' ' < "$INPUT_FILE" > /dev/null
+    echo "--------------------------------"
+
+    echo "----------- one-liner test ------------"
+    ../one-liner < "$INPUT_FILE" | wc
+
+    time ../one-liner < "$INPUT_FILE" > /dev/null
+    echo "---------------------------------------"
+done
+
 

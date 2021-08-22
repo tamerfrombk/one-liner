@@ -3,11 +3,18 @@
 import sys
 
 def seed(n):
+    fileToIteration = {
+        'small.txt': 5,
+        'medium.txt': 500,
+        'large.txt': 500_000
+    }
+
     with open("lorem-ipsum.txt", "r") as r:
         contents = r.read()
-        with open("large-file.txt", "w") as w:
-            for i in range(n):
-                w.write(contents)
+        for [name, iteration] in fileToIteration.items():
+            with open(name, "w") as w:
+                for i in range(iteration):
+                    w.write(contents)
 
 
 def parse_iteration_count(argv):
