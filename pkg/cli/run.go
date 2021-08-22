@@ -34,18 +34,24 @@ func PrintOneLine(r io.Reader, w io.Writer) error {
 
 	reader := bufio.NewReader(r)
 
-	buf := make([]byte, READ_BUFFER_LEN)
-	for n, err := reader.Read(buf); n > 0; n, err = reader.Read(buf) {
+	readBuffer := make([]byte, READ_BUFFER_LEN)
+	for n, err := reader.Read(readBuffer); n > 0; n, err = reader.Read(readBuffer) {
 		if err != nil {
 			return err
 		}
 
+		// OPTIMIZATION(time): Write(buf) will write the entire contents of buf.
+		// This means that if we manage to read as many bytes as the buffer holds,
+		// then we can write the buffer directly.
+		// If we read less than the read buffer size, we're forced to allocate a smaller
+		// array.
+		var writeBuffer []byte = nil;
 		if n == READ_BUFFER_LEN {
-			w.Write(clean(buf, n))
+			writeBuffer = removeNewline(readBuffer, n)
 		} else {
-			temp := buf[:n]
-			w.Write(clean(temp, n))
+			writeBuffer = removeNewline(readBuffer[:n], n)
 		}
+		w.Write(writeBuffer)
 	}
 
 	return nil
@@ -66,7 +72,7 @@ func Run(cmdLine []string) int {
 	return 0
 }
 
-func clean(buf []byte, n int) []byte {
+func removeNewline(buf []byte, n int) []byte {
 	for i := 0; i < n; i++ {
 		if buf[i] == '\n' {
 			buf[i] = ' '
