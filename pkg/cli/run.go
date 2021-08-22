@@ -23,16 +23,23 @@ func ParseArgs() *Args {
 }
 
 func PrintOneLine(r io.Reader, w io.Writer) error {
+	
+	const READ_BUFFER_LEN = 64 * 1024
 
 	reader := bufio.NewReader(r)
 
-	buf := make([]byte, 64 * 1024)
-	for b, err := reader.Read(buf); b > 0; b, err = reader.Read(buf) {
+	buf := make([]byte, READ_BUFFER_LEN)
+	for n, err := reader.Read(buf); n > 0; n, err = reader.Read(buf) {
 		if err != nil {
 			return err
 		}
 
-		w.Write(clean(buf, b))
+		if n == READ_BUFFER_LEN {
+			w.Write(clean(buf, n))
+		} else {
+			temp := buf[:n]
+			w.Write(clean(temp, n))
+		}
 	}
 
 	return nil
@@ -41,7 +48,8 @@ func PrintOneLine(r io.Reader, w io.Writer) error {
 func Run(cmdLine []string) int {
 	args := ParseArgs()
 	if args.IsHelp {
-		printHelp(0)
+		flag.PrintDefaults()
+		return 0
 	}
 
 	if err := PrintOneLine(os.Stdin, os.Stdout); err != nil {
@@ -52,21 +60,12 @@ func Run(cmdLine []string) int {
 	return 0
 }
 
-func clean(b []byte, n int) []byte {
-	buf := make([]byte, n)
+func clean(buf []byte, n int) []byte {
 	for i := 0; i < n; i++ {
-		if b[i] == '\n' {
+		if buf[i] == '\n' {
 			buf[i] = ' '
-		} else {
-			buf[i] = b[i] 
 		}
 	}
 
 	return buf
-}
-
-func printHelp(exitCode int) {
-	flag.PrintDefaults()
-
-	os.Exit(exitCode)
 }
