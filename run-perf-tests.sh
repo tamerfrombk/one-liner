@@ -6,7 +6,7 @@ go build ./cmd/one-liner
 
 cd test-data
 
-inputs='small.txt medium.txt large.txt'
+inputs='small.txt medium.txt large.txt huge.txt'
 for input in $inputs; do
     INPUT_FILE="$input"
 

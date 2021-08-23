@@ -17,18 +17,7 @@ func TestPrintOneLine_LFText_LF(t *testing.T) {
 		"hello\n ": "hello  ",
 	}
 
-	for input, expected := range testCases {
-		reader := strings.NewReader(input)
-		writer := bytes.NewBufferString("")
-
-		if err := PrintOneLine(reader, writer, "\n"); err != nil {
-			t.Fatal(err)
-		}
-
-		if actual := writer.String(); actual != expected {
-			t.Fatalf("expected '%s', got '%s'", expected, actual)
-		}
-	}
+	runTestCases(t, testCases, "\n")
 }
 
 func TestPrintOneLine_CRLFText_CRLF(t *testing.T) {
@@ -42,18 +31,7 @@ func TestPrintOneLine_CRLFText_CRLF(t *testing.T) {
 		"hello\r\n ": "hello  ",
 	}
 
-	for input, expected := range testCases {
-		reader := strings.NewReader(input)
-		writer := bytes.NewBufferString("")
-
-		if err := PrintOneLine(reader, writer, "\r\n"); err != nil {
-			t.Fatal(err)
-		}
-
-		if actual := writer.String(); actual != expected {
-			t.Fatalf("expected '%s', got '%s'", expected, actual)
-		}
-	}
+	runTestCases(t, testCases, "\r\n")
 }
 
 func TestPrintOneLine_CRLFText_LF(t *testing.T) {
@@ -67,18 +45,7 @@ func TestPrintOneLine_CRLFText_LF(t *testing.T) {
 		"hello\r\n ": "hello\r  ",
 	}
 
-	for input, expected := range testCases {
-		reader := strings.NewReader(input)
-		writer := bytes.NewBufferString("")
-
-		if err := PrintOneLine(reader, writer, "\n"); err != nil {
-			t.Fatal(err)
-		}
-
-		if actual := writer.String(); actual != expected {
-			t.Fatalf("expected '%s', got '%s'", expected, actual)
-		}
-	}
+	runTestCases(t, testCases, "\n")
 }
 
 func TestPrintOneLine_LFText_CRLF(t *testing.T) {
@@ -92,16 +59,20 @@ func TestPrintOneLine_LFText_CRLF(t *testing.T) {
 		"hello\n ": "hello\n ",
 	}
 
+	runTestCases(t, testCases, "\r\n")
+}
+
+func runTestCases(t *testing.T, testCases map[string]string, newLine string) {
 	for input, expected := range testCases {
 		reader := strings.NewReader(input)
 		writer := bytes.NewBufferString("")
 
-		if err := PrintOneLine(reader, writer, "\r\n"); err != nil {
+		if err := PrintOneLine(reader, writer, newLine); err != nil {
 			t.Fatal(err)
 		}
 
-		if actual := writer.String(); actual != expected {
-			t.Fatalf("expected '%s', got '%s'", expected, actual)
+		if actual := writer.String(); actual != expected + newLine {
+			t.Fatalf("expected '%s', got '%s'", expected + newLine, actual)
 		}
 	}
 }

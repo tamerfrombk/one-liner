@@ -76,6 +76,7 @@ func PrintOneLine(r io.Reader, w io.Writer, lineEnding string) error {
 		}
 		w.Write(writeBuffer)
 	}
+	w.Write([]byte(lineEnding))
 
 	return nil
 }
