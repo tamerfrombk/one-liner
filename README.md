@@ -42,15 +42,16 @@ look here, a line surprise, another line
 
 ### Performance Testing
 
-Navigate to the root of the source tree.
+Navigate to the root of the source tree. Ensure you stay in this directory for the remainder of these instructions.
 
-To test the performance of `one-liner`, first generate the input test files by running the `gen-test-data.py` script. This will generate 4 input test files inside of `/test-data`: `small.txt`, `medium.txt`, `large.txt`, and `huge.txt`. These files are used as input data to `one-liner`.
+First, generate the input test files by running the `gen-test-data.py` script. This will generate 4 input test files inside of `/test-data`: `small.txt`, `medium.txt`, `large.txt`, and `huge.txt`. These files are used as input data to `one-liner`.
 
 From there, run the `run-perf-tests.sh`. This script will build `one-liner` and execute the following against each input file in ascending size order:
 
 1. `wc` to count the number of lines, words, and bytes in the input file. This serves as a benchmark for correctness.
-2. `time tr -s <newline> ' '` to serve as a baseline for a correct implementation and performance measure.
-3. `time one-line` to exercise our program.
+2. `time tr -s <newline> ' '` as a baseline for a correct implementation and performance measure.
+3. `time awk '{printf "%s ",$0}'` as an alternate implementation and performance measure.
+4. `time one-line` to exercise the program.
 
 All tests assume the input files use the OS' default line ending and use the `time` program to check performance.
 
