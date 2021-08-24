@@ -1,6 +1,6 @@
 # one-liner
 
-`one-liner` is a command line utility that reads input from `stdin` and folds it into one line on `stdout`. The goal of this program is to be simple and have a significant performance improvement over other UNIX tools that can be used to accomplish this task. Presently, `one-liner` is roughly 3 times faster than `tr` at accomplishing the same task.
+`one-liner` is a command line utility that reads input from `stdin` and folds it into one line on `stdout`. The goal of this program is to be simple and have a significant performance improvement over other UNIX tools that can be used to accomplish this task. Presently, `one-liner` is roughly 4 times faster than `tr` and 3 times faster than `awk` at accomplishing the same task.
 
 ### Running
 
@@ -64,17 +64,24 @@ Input file: large.txt
 ----------- tr test ------------
       0 15650000 107800001
 
-real    0m0.310s
-user    0m0.270s
-sys     0m0.040s
+real    0m0.232s
+user    0m0.229s
+sys     0m0.000s
+--------------------------------
+----------- awk test ------------
+      0 15650000 108050000
+
+real    0m0.149s
+user    0m0.100s
+sys     0m0.050s
 --------------------------------
 ----------- one-liner test ------------
-      1 15650000 108050001
+      0 15650000 108050000
 
-real    0m0.114s
-user    0m0.105s
-sys     0m0.010s
+real    0m0.059s
+user    0m0.059s
+sys     0m0.000s
 ---------------------------------------
 ```
 
-Here, we can see that `one-liner` preserved the word and byte count of `large.txt` but obviously the input was collapsed to one line. We can also see that `one-liner` is approximately 3 times as fast as `tr` in this case.
+Here, we can see that `one-liner` preserved the word and byte count of `large.txt` but obviously the input was collapsed to one line. We can also see that `one-liner` is approximately 4 times as fast as `tr` in this case and 3 times as fast as `awk`.

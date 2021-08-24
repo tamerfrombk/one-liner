@@ -22,6 +22,12 @@ for input in $inputs; do
     time tr -s '\n' ' ' < "$INPUT_FILE" > /dev/null
     echo "--------------------------------"
 
+    echo "----------- awk test ------------"
+    awk '{printf "%s ",$0}' < "$INPUT_FILE" | wc
+
+    time awk '{printf "%s ",$0}' < "$INPUT_FILE" > /dev/null
+    echo "--------------------------------"
+
     echo "----------- one-liner test ------------"
     ../one-liner < "$INPUT_FILE" | wc
 

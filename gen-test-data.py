@@ -2,8 +2,10 @@
 
 import os
 
+
 def test_file_path(name):
     return os.path.join(os.getcwd(), "test-data", name)
+
 
 def seed():
     fileToIterationCount = {
@@ -17,6 +19,7 @@ def seed():
         contents = r.read()
         for [name, count] in fileToIterationCount.items():
             with open(test_file_path(name), "w") as w:
+                print("Generating '{}'".format(name))
                 w.write(contents * count)
 
 
@@ -26,4 +29,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
