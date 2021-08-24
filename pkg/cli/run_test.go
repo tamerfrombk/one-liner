@@ -1,9 +1,9 @@
 package cli
 
 import (
-	"testing"
 	"bytes"
 	"strings"
+	"testing"
 )
 
 func TestPrintOneLine_LFText_LF(t *testing.T) {
@@ -71,8 +71,8 @@ func runTestCases(t *testing.T, testCases map[string]string, newLine string) {
 			t.Fatal(err)
 		}
 
-		if actual := writer.String(); actual != expected + newLine {
-			t.Fatalf("expected '%s', got '%s'", expected + newLine, actual)
+		if actual := writer.String(); actual != expected {
+			t.Fatalf("expected '%s', got '%s'", expected, actual)
 		}
 	}
 }
